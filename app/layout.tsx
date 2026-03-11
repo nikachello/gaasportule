@@ -1,15 +1,23 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
+import { GlassNavbar } from "./components/landing/glassy-navbar";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+const bpgGlaho = localFont({
+  src: [
+    {
+      path: "../public/fonts/bpg-glaho/BPGGlaho.woff2",
+      weight: "400",
+      style: "normal",
+    },
+    {
+      path: "../public/fonts/bpg-glaho/BPGGlaho.woff",
+      weight: "400",
+      style: "normal",
+    },
+  ],
+  variable: "--font-bpg-glaho",
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -19,15 +27,16 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        {children}
+    <html lang="ka">
+      <body className={`${bpgGlaho.variable} font-georgian antialiased`}>
+        <div>
+          <GlassNavbar />
+          {children}
+        </div>
       </body>
     </html>
   );
