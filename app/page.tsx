@@ -1,3 +1,4 @@
+import FriendsOfProject from "@/components/landing/sections/friends-of-project";
 import HowTheAppWorks from "@/components/landing/sections/how-the-app-works";
 import HowToJoin from "@/components/landing/sections/how-to-join";
 import MainHeading from "@/components/landing/sections/main-heading";
@@ -17,6 +18,9 @@ export default function HeroSection() {
       </section>
       <section id="how-to-join">
         <HowToJoin />
+      </section>
+      <section id="friend-of-project">
+        <FriendsOfProject />
       </section>
     </>
   );
