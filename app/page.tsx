@@ -7,7 +7,9 @@ export default function HeroSection() {
     <>
       <MainHeading />
       <Perks />
-      <WhoWeHelp />
+      <section id="who-we-help">
+        <WhoWeHelp />
+      </section>
     </>
   );
 }
