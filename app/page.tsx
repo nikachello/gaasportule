@@ -1,6 +1,7 @@
-import Perks from "./components/landing/sections/perks";
-import MainHeading from "./components/landing/sections/main-heading";
-import WhoWeHelp from "./components/landing/sections/who-we-help";
+import HowTheAppWorks from "@/components/landing/sections/how-the-app-works";
+import MainHeading from "@/components/landing/sections/main-heading";
+import Perks from "@/components/landing/sections/perks";
+import WhoWeHelp from "@/components/landing/sections/who-we-help";
 
 export default function HeroSection() {
   return (
@@ -9,6 +10,9 @@ export default function HeroSection() {
       <Perks />
       <section id="who-we-help">
         <WhoWeHelp />
+      </section>
+      <section id="how-the-app-works">
+        <HowTheAppWorks />
       </section>
     </>
   );

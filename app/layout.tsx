@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
-import { GlassNavbar } from "./components/landing/glassy-navbar";
+import { GlassNavbar } from "@/components/landing/glassy-navbar";
 
 const bpgGlaho = localFont({
   src: [
