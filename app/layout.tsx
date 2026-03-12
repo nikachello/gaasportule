@@ -34,7 +34,7 @@ export default function RootLayout({
     <html lang="ka">
       <body className={`${bpgGlaho.variable} font-georgian antialiased`}>
         <div>
-          <GlassNavbar />
+          {/* <GlassNavbar /> */}
           {children}
         </div>
       </body>
