@@ -1,3 +1,4 @@
+import CompanyPartners from "@/components/landing/sections/company-partners";
 import Faq from "@/components/landing/sections/faq";
 import Founders from "@/components/landing/sections/founders";
 import FriendsOfProject from "@/components/landing/sections/friends-of-project";
@@ -33,6 +34,9 @@ export default function HeroSection() {
       </section>
       <section id="faq">
         <Faq />
+      </section>
+      <section id="partners">
+        <CompanyPartners />
       </section>
     </>
   );
