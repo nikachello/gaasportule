@@ -9,7 +9,7 @@ import { useState } from "react";
 
 const faqs = [
   {
-    question: "What is included in the free plan?",
+    question: "როგორ დაიხარჯება ჩემი თანხა?",
     answer:
       "The free plan includes access to basic components, up to 5 projects, community support, and regular updates. It's perfect for individuals and small projects to get started.",
   },
@@ -44,7 +44,7 @@ export function FAQAccordionBlock() {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   return (
-    <section className="w-full bg-gradient-to-b from-background to-muted/30 px-4 py-16 md:py-24">
+    <section className="w-full  px-4 py-16 md:py-24">
       <div className="mx-auto max-w-4xl">
         {/* Header */}
         <motion.div
@@ -53,17 +53,9 @@ export function FAQAccordionBlock() {
           transition={{ duration: 0.6 }}
           className="mb-12 text-center md:mb-16"
         >
-          <Badge className="mb-4" variant="secondary">
-            <HelpCircle className="mr-1 h-3 w-3" />
-            FAQ
-          </Badge>
           <h2 className="mb-4 text-3xl font-bold tracking-tight md:text-4xl lg:text-5xl">
-            Frequently Asked Questions
+            ხშირად დასმული შეკითხვები
           </h2>
-          <p className="mx-auto max-w-2xl text-base text-muted-foreground md:text-lg">
-            Have a question? We've got answers. If you don't find what you're
-            looking for, feel free to contact us.
-          </p>
         </motion.div>
 
         {/* FAQ Accordion */}
@@ -78,7 +70,7 @@ export function FAQAccordionBlock() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1, duration: 0.4 }}
               >
-                <Card className="overflow-hidden border-border/50 bg-card transition-all hover:border-primary/50 hover:shadow-md">
+                <Card className="overflow-hidden border-border/50 bg-transparents transition-all hover:border-primary/50 hover:shadow-md">
                   <motion.button
                     onClick={() => setOpenIndex(isOpen ? null : index)}
                     className="flex w-full items-center justify-between p-4 text-left md:p-6"
@@ -94,7 +86,7 @@ export function FAQAccordionBlock() {
                       transition={{ duration: 0.3, ease: "easeInOut" }}
                       className="flex-shrink-0"
                     >
-                      <ChevronDown className="h-5 w-5 text-muted-foreground" />
+                      <ChevronDown className="h-5 w-5 text-default-blue" />
                     </motion.div>
                   </motion.button>
 
@@ -111,7 +103,7 @@ export function FAQAccordionBlock() {
                           <motion.p
                             initial={{ y: -10 }}
                             animate={{ y: 0 }}
-                            className="text-sm text-muted-foreground md:text-base"
+                            className="text-sm text-default-blue md:text-base"
                           >
                             {faq.answer}
                           </motion.p>
@@ -132,20 +124,25 @@ export function FAQAccordionBlock() {
           transition={{ delay: 0.8 }}
           className="mt-12 text-center md:mt-16"
         >
-          <Card className="border-border/50 bg-gradient-to-br from-card to-muted/30 p-6 md:p-8">
+          <Card className="border-border/50 p-6 md:p-8">
             <MessageCircle className="mx-auto mb-4 h-12 w-12 text-primary" />
             <h3 className="mb-2 text-xl font-bold md:text-2xl">
-              Still have questions?
+              კიდევ გაქვთ კითხვები?
             </h3>
             <p className="mb-6 text-sm text-muted-foreground md:text-base">
-              Our team is here to help. Get in touch and we'll respond as soon
-              as possible.
+              დაგვიკავშირდით!
             </p>
             <div className="flex flex-col justify-center gap-3 sm:flex-row">
-              <Button size="lg">Contact Support</Button>
-              <Button size="lg" variant="outline">
-                View Documentation
-              </Button>
+              <button
+                className="px-7 py-5 rounded-full font-bold text-3xl transition-all duration-300 cursor-pointer whitespace-nowrap w-fit"
+                style={{
+                  background: "transparent",
+                  color: "var(--color-default-blue)",
+                  border: "2px solid var(--color-default-blue)",
+                }}
+              >
+                დაკავშირება
+              </button>
             </div>
           </Card>
         </motion.div>

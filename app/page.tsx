@@ -1,3 +1,4 @@
+import Faq from "@/components/landing/sections/faq";
 import Founders from "@/components/landing/sections/founders";
 import FriendsOfProject from "@/components/landing/sections/friends-of-project";
 import HowTheAppWorks from "@/components/landing/sections/how-the-app-works";
@@ -29,6 +30,9 @@ export default function HeroSection() {
       </section>
       <section id="founders">
         <Founders />
+      </section>
+      <section id="faq">
+        <Faq />
       </section>
     </>
   );
