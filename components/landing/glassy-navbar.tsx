@@ -91,10 +91,11 @@ export function GlassNavbar() {
       <a
         href={href}
         onClick={(e) => handleNav(e, href)}
-        className={`relative px-4 py-2 rounded-full font-medium transition-all duration-300 text-sm
-        after:absolute after:bottom-1 after:left-4 after:right-4 after:h-[2px] after:w-[0%] after:bg-default-blue
-        after:transition-all after:duration-300 hover:after:w-[calc(100%-2rem)]
-        ${"text-default-blue/60"}`}
+        className={`relative px-2 lg:px-4 py-2 rounded-full font-medium transition-all duration-300 text-xs lg:text-sm whitespace-nowrap
+        after:absolute after:bottom-1 after:left-2 after:right-2 after:h-[2px] after:w-[0%] after:bg-default-blue
+        after:transition-all after:duration-300 hover:after:w-[calc(100%-1rem)]
+        lg:after:left-4 lg:after:right-4 lg:hover:after:w-[calc(100%-2rem)]
+        text-default-blue/60`}
         style={{
           background: "transparent",
           boxShadow: "none",
@@ -109,7 +110,7 @@ export function GlassNavbar() {
     <header className="w-full fixed top-0 inset-x-0 z-50 flex justify-center pt-4 px-4">
       {/* Desktop */}
       <nav
-        className="hidden md:flex w-[80%] justify-between items-center gap-1 px-2 py-2 rounded-full font-georgian h-[70px]"
+        className="hidden md:flex w-[90%] max-w-5xl justify-between items-center gap-1 px-2 py-2 rounded-full font-georgian h-[70px]"
         style={{
           transition: "all 0.5s ease",
           background: scrolled
@@ -124,14 +125,14 @@ export function GlassNavbar() {
             e.preventDefault();
             window.scrollTo({ top: 0, behavior: "smooth" });
           }}
-          className="px-4 py-2 font-bold tracking-tight text-default-blue whitespace-nowrap text-2xl"
+          className="px-4 py-2 font-bold tracking-tight text-default-blue whitespace-nowrap text-lg shrink-0"
         >
           გაასპორტულე
         </a>
 
-        <div className="w-px h-4 bg-white/20 mx-1" />
+        <div className="w-px h-4 bg-white/20 mx-1 shrink-0" />
 
-        <div className="flex flex-row gap-10">
+        <div className="flex flex-row gap-1 lg:gap-4 xl:gap-6 overflow-hidden">
           {links.map((link) => (
             <NavLink key={link.id} {...link} />
           ))}

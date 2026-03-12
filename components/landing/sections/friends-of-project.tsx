@@ -1,6 +1,7 @@
 import Container from "@/components/layout/container";
 import Section from "@/components/layout/section";
 import Image from "next/image";
+import Header from "../header";
 
 const friends = [
   {
@@ -39,6 +40,11 @@ const FriendsOfProject = () => {
   return (
     <Section>
       <Container>
+        <div className="w-full text-center mb-10">
+          <h1 className="text-default-blue font-bold text-4xl">
+            პროექტის მეგობრები
+          </h1>
+        </div>
         <div className="grid grid-cols-2 md:grid-cols-3 gap-8">
           {friends.map((friend, index) => (
             <div key={index} className="flex flex-col items-center gap-4">
