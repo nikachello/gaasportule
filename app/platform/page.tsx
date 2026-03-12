@@ -4,12 +4,11 @@ import OpenCollectings from "@/components/platform/home/open-collectings";
 
 const Page = () => {
   return (
-    <>
+    <div className="space-y-5">
       <HelloGuest />
       <FinishedCollecting />
-      <div className="mb-5" />
       <OpenCollectings />
-    </>
+    </div>
   );
 };
 
