@@ -1,6 +1,7 @@
 import FriendsOfProject from "@/components/landing/sections/friends-of-project";
 import HowTheAppWorks from "@/components/landing/sections/how-the-app-works";
 import HowToJoin from "@/components/landing/sections/how-to-join";
+import InformationPartners from "@/components/landing/sections/information-partners";
 import MainHeading from "@/components/landing/sections/main-heading";
 import Perks from "@/components/landing/sections/perks";
 import WhoWeHelp from "@/components/landing/sections/who-we-help";
@@ -21,6 +22,9 @@ export default function HeroSection() {
       </section>
       <section id="friend-of-project">
         <FriendsOfProject />
+      </section>
+      <section id="information-partners">
+        <InformationPartners />
       </section>
     </>
   );
