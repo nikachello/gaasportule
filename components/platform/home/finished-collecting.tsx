@@ -6,7 +6,7 @@ const FinishedCollecting = () => {
       <div className="flex flex-row items-center justify-between align-center gap-2">
         <div className="flex flex-row items-center gap-2">
           <span>🏁</span>
-          <span className="font-bold"> დასრულებული ქველმოქმედებები</span>
+          <span> დასრულებული ქველმოქმედებები</span>
         </div>
         <div className="flex flex-row gap-2 items-center">
           <span className="font-bold bg-light-blue px-4 py-2 rounded-4xl">

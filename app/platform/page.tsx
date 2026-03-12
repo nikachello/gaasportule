@@ -7,6 +7,7 @@ const Page = () => {
     <>
       <HelloGuest />
       <FinishedCollecting />
+      <div className="mb-5" />
       <OpenCollectings />
     </>
   );
