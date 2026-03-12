@@ -1,3 +1,4 @@
+import Founders from "@/components/landing/sections/founders";
 import FriendsOfProject from "@/components/landing/sections/friends-of-project";
 import HowTheAppWorks from "@/components/landing/sections/how-the-app-works";
 import HowToJoin from "@/components/landing/sections/how-to-join";
@@ -26,7 +27,9 @@ export default function HeroSection() {
       <section id="information-partners">
         <InformationPartners />
       </section>
-      <section id="founders"></section>
+      <section id="founders">
+        <Founders />
+      </section>
     </>
   );
 }
