@@ -26,6 +26,7 @@ export default function HeroSection() {
       <section id="information-partners">
         <InformationPartners />
       </section>
+      <section id="founders"></section>
     </>
   );
 }

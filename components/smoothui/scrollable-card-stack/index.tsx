@@ -285,7 +285,7 @@ const ScrollableCardStack: React.FC<ScrollableCardStackProps> = ({
       aria-label="Scrollable card stack"
       aria-live="polite"
       className={cn(
-        "relative mx-auto h-fit w-fit min-w-[300px] bg-transparent",
+        "relative mx-auto h-fit w-full max-w-[200px] px-4 bg-transparent",
         className
       )}
     >
@@ -325,7 +325,7 @@ const ScrollableCardStack: React.FC<ScrollableCardStackProps> = ({
                     }
               }
               aria-hidden={!isActive}
-              className="absolute top-1/2 left-1/2 w-max max-w-[100vw] overflow-hidden rounded-2xl border bg-background shadow-lg"
+              className="absolute top-1/2 left-1/2 w-[90vw] max-w-[400px] overflow-hidden rounded-2xl border bg-background shadow-lg"
               data-active={isActive}
               initial={false}
               key={`scrollable-card-${item.id}`}
