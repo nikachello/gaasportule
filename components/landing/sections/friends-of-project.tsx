@@ -1,8 +1,6 @@
 import Container from "@/components/layout/container";
 import Section from "@/components/layout/section";
 import Image from "next/image";
-import Header from "../header";
-
 const friends = [
   {
     name: "ლაშა ტალახაძე",

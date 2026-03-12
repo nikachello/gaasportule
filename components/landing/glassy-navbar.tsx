@@ -7,7 +7,7 @@ const links = [
   { id: "how-to-join", label: "როგორ შემოგიერთდეთ", href: "#how-to-join" },
   { id: "founders", label: "დამფუძნებლები", href: "#founders" },
   { id: "partners", label: "პარტნიორები", href: "#partners" },
-  { id: "contact", label: "დაგვიკავშირდით", href: "#contact" },
+  { id: "contact", label: "დაგვიკავშირდით", href: "#footer" },
 ];
 
 const glassStyle: React.CSSProperties = {
@@ -19,7 +19,6 @@ const glassStyle: React.CSSProperties = {
 export function GlassNavbar() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
-  const [active, setActive] = useState("");
 
   // Scroll detection
   useEffect(() => {
@@ -37,12 +36,9 @@ export function GlassNavbar() {
       const el = document.getElementById(id);
       if (!el) return;
 
-      const observer = new IntersectionObserver(
-        ([entry]) => {
-          if (entry.isIntersecting) setActive(id);
-        },
-        { threshold: 0.4 }
-      );
+      const observer = new IntersectionObserver(() => {}, {
+        threshold: 0.4,
+      });
 
       observer.observe(el);
       observers.push(observer);
@@ -59,7 +55,6 @@ export function GlassNavbar() {
   };
 
   const NavLink = ({
-    id,
     label,
     href,
     mobile = false,
@@ -69,8 +64,6 @@ export function GlassNavbar() {
     href: string;
     mobile?: boolean;
   }) => {
-    const isActive = active === id;
-
     if (mobile) {
       return (
         <a

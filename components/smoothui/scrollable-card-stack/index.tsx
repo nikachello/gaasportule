@@ -276,7 +276,7 @@ const ScrollableCardStack: React.FC<ScrollableCardStackProps> = ({
         zIndex,
       };
     },
-    [currentIndex, items.length, clamp, shouldReduceMotion]
+    [currentIndex, items.length, clamp, shouldReduceMotion, FRAME_OFFSET]
   );
 
   return (

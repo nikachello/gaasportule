@@ -57,78 +57,80 @@ interface LogoColumnProps {
 }
 
 // LogoColumn component: Displays a single column of animated logos
-const LogoColumn: React.FC<LogoColumnProps> = React.memo(
-  ({ logos, index, currentTime }) => {
-    const cycleInterval = 2000; // Time each logo is displayed (in milliseconds)
-    const columnDelay = index * 200; // Stagger the start of each column's animation
-    // Calculate which logo should be displayed based on the current time
-    const adjustedTime =
-      (currentTime + columnDelay) % (cycleInterval * logos.length);
-    const currentIndex = Math.floor(adjustedTime / cycleInterval);
+const LogoColumn: React.FC<LogoColumnProps> = React.memo(function LogoColumn({
+  logos,
+  index,
+  currentTime,
+}) {
+  const cycleInterval = 2000; // Time each logo is displayed (in milliseconds)
+  const columnDelay = index * 200; // Stagger the start of each column's animation
+  // Calculate which logo should be displayed based on the current time
+  const adjustedTime =
+    (currentTime + columnDelay) % (cycleInterval * logos.length);
+  const currentIndex = Math.floor(adjustedTime / cycleInterval);
 
-    // Memoize the current logo to prevent unnecessary re-renders
-    const CurrentLogo = useMemo(
-      () => logos[currentIndex].img,
-      [logos, currentIndex]
-    );
+  // Memoize the current logo to prevent unnecessary re-renders
+  const CurrentLogo = useMemo(
+    () => logos[currentIndex].img,
+    [logos, currentIndex]
+  );
 
-    return (
-      // Framer Motion component for the column container
-      <motion.div
-        className="w-24 h-14 md:w-48 md:h-24 overflow-hidden relative"
-        initial={{ opacity: 0, y: 50 }} // Start invisible and below final position
-        animate={{ opacity: 1, y: 0 }} // Animate to full opacity and final position
-        transition={{
-          delay: index * 0.1, // Stagger the animation of each column
-          duration: 0.5,
-          ease: "easeOut",
-        }}
-      >
-        {/* AnimatePresence enables animation of components that are removed from the DOM */}
-        <AnimatePresence mode="wait">
-          {/* Framer Motion component for each logo */}
-          <motion.div
-            key={`${logos[currentIndex].id}-${currentIndex}`}
-            className="absolute inset-0 flex items-center justify-center"
-            // Animation for when the logo enters
-            initial={{ y: "10%", opacity: 0, filter: "blur(8px)" }}
-            // Animation for when the logo is displayed
-            animate={{
-              y: "0%",
-              opacity: 1,
-              filter: "blur(0px)",
-              transition: {
-                type: "spring",
-                stiffness: 300,
-                damping: 20,
-                mass: 1,
-                bounce: 0.2,
-                duration: 0.5,
-              },
-            }}
-            // Animation for when the logo exits
-            exit={{
-              y: "-20%",
-              opacity: 0,
-              filter: "blur(6px)",
-              transition: {
-                type: "tween",
-                ease: "easeIn",
-                duration: 0.3,
-              },
-            }}
-          >
-            <CurrentLogo className="w-20 h-20 md:w-32 md:h-32 max-w-[80%] max-h-[80%] object-contain" />
-          </motion.div>
-        </AnimatePresence>
-      </motion.div>
-    );
-  }
-);
+  return (
+    // Framer Motion component for the column container
+    <motion.div
+      className="w-24 h-14 md:w-48 md:h-24 overflow-hidden relative"
+      initial={{ opacity: 0, y: 50 }} // Start invisible and below final position
+      animate={{ opacity: 1, y: 0 }} // Animate to full opacity and final position
+      transition={{
+        delay: index * 0.1, // Stagger the animation of each column
+        duration: 0.5,
+        ease: "easeOut",
+      }}
+    >
+      {/* AnimatePresence enables animation of components that are removed from the DOM */}
+      <AnimatePresence mode="wait">
+        {/* Framer Motion component for each logo */}
+        <motion.div
+          key={`${logos[currentIndex].id}-${currentIndex}`}
+          className="absolute inset-0 flex items-center justify-center"
+          // Animation for when the logo enters
+          initial={{ y: "10%", opacity: 0, filter: "blur(8px)" }}
+          // Animation for when the logo is displayed
+          animate={{
+            y: "0%",
+            opacity: 1,
+            filter: "blur(0px)",
+            transition: {
+              type: "spring",
+              stiffness: 300,
+              damping: 20,
+              mass: 1,
+              bounce: 0.2,
+              duration: 0.5,
+            },
+          }}
+          // Animation for when the logo exits
+          exit={{
+            y: "-20%",
+            opacity: 0,
+            filter: "blur(6px)",
+            transition: {
+              type: "tween",
+              ease: "easeIn",
+              duration: 0.3,
+            },
+          }}
+        >
+          <CurrentLogo className="w-20 h-20 md:w-32 md:h-32 max-w-[80%] max-h-[80%] object-contain" />
+        </motion.div>
+      </AnimatePresence>
+    </motion.div>
+  );
+});
 
 // Main LogoCarousel component
 function LogoCarousel({ columnCount = 2 }: { columnCount?: number }) {
-  const [logoSets, setLogoSets] = useState<Logo[][]>([]);
+  // const [logoSets, setLogoSets] = useState<Logo[][]>([]);
   const [currentTime, setCurrentTime] = useState(0);
 
   // Memoize the array of logos to prevent unnecessary re-renders
@@ -153,10 +155,10 @@ function LogoCarousel({ columnCount = 2 }: { columnCount?: number }) {
   );
 
   // Distribute logos across columns when the component mounts
-  useEffect(() => {
-    const distributedLogos = distributeLogos(allLogos, columnCount);
-    setLogoSets(distributedLogos);
-  }, [allLogos]);
+  const logoSets = useMemo(
+    () => distributeLogos(allLogos, columnCount),
+    [allLogos, columnCount]
+  );
 
   // Function to update the current time (used for logo cycling)
   const updateTime = useCallback(() => {

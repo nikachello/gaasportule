@@ -2,7 +2,7 @@ import React from "react";
 
 type SectionProps = {
   children: React.ReactNode;
-  bg?: "default" | "muted" | "primary" | "gray" | "sky";
+  bg?: "default" | "muted" | "primary" | "gray" | "sky" | "dgray";
   noPadding?: boolean;
 };
 
@@ -12,6 +12,7 @@ const bgVariants = {
   primary: "bg-default-blue text-white",
   gray: "bg-[#F3FBFE]",
   sky: "bg-light-blue",
+  dgray: "bg-[#404040]",
 };
 
 export default function Section({
