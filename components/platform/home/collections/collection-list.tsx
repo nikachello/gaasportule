@@ -3,7 +3,6 @@ import Image from "next/image";
 
 import { MapPin, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { col } from "framer-motion/client";
 import ContributorsListDrawer from "./contributors-list-drawer";
 import { City, Collection } from "@/lib/types/collection";
 
@@ -14,10 +13,6 @@ interface CollectionListProps {
   cities: City[];
   sports: SportCategory[];
 }
-
-const handleContributorsList = (collection: Collection) => {
-  console.log(collection.contributors);
-};
 
 const CollectionList = ({ collections, cities }: CollectionListProps) => {
   if (collections.length === 0) {
@@ -39,7 +34,7 @@ const CollectionList = ({ collections, cities }: CollectionListProps) => {
         const visibleContributors = collection.contributors.slice(0, 3);
 
         return (
-          <div key={collection.id} className="relative">
+          <div key={collection.id} className="relative shadow-xl rounded-3xl">
             <div className="relative w-full aspect-[3/4] rounded-3xl overflow-hidden">
               <Image
                 src="/images/landing/collectings/1.jpg"
@@ -50,7 +45,7 @@ const CollectionList = ({ collections, cities }: CollectionListProps) => {
             </div>
 
             {/* Card overlapping from bottom */}
-            <div className="absolute bottom-2 left-4 right-4 bg-white rounded-3xl shadow-lg p-4">
+            <div className="absolute bottom-2 left-2 right-2 bg-white rounded-3xl shadow-lg p-4">
               <div className="flex flex-col gap-4">
                 <div className="flex flex-row items-center gap-1 bg-muted p-2 rounded-3xl text-xs w-fit">
                   <MapPin className="w-4 h-4" />
