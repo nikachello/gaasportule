@@ -50,8 +50,6 @@ const CollectingFilter = ({
         ? "📍 რეგიონი"
         : `📍 რეგიონი (${selectedRegions.length})`;
 
-    console.log(sports);
-
     return (
       <Drawer>
         <DrawerTrigger asChild>

@@ -1,10 +1,12 @@
 "use client";
 import Image from "next/image";
-
 import { MapPin, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import ContributorsListDrawer from "./contributors-list-drawer";
 import { City, Collection } from "@/lib/types/collection";
+import { useRouter } from "next/navigation";
+import ProgressBarWithLabel from "./progress-bar-with-label";
+import { useState } from "react";
 
 type SportCategory = { id: string; name: string };
 
@@ -15,6 +17,9 @@ interface CollectionListProps {
 }
 
 const CollectionList = ({ collections, cities }: CollectionListProps) => {
+  const router = useRouter();
+  const [openCollectionId, setOpenCollectionId] = useState<string | null>(null);
+
   if (collections.length === 0) {
     return (
       <p className="text-muted-foreground text-sm py-4 text-center">
@@ -27,64 +32,67 @@ const CollectionList = ({ collections, cities }: CollectionListProps) => {
     <div className="space-y-6 w-full">
       {collections.map((collection) => {
         const city = cities.find((ci) => ci.id === collection.cityId);
-        const percent = Math.min(
-          Math.round((collection.raised / collection.goal) * 100),
-          100
-        );
         const visibleContributors = collection.contributors.slice(0, 3);
+        const drawerOpen = openCollectionId === collection.id;
 
         return (
-          <div key={collection.id} className="relative shadow-xl rounded-3xl">
+          <div
+            key={collection.id}
+            className="relative shadow-xl rounded-3xl cursor-pointer"
+            onClick={() => {
+              if (!drawerOpen) {
+                router.push(`/platform/collection/${collection.id}`);
+              }
+            }}
+          >
+            {/* Collection Image */}
             <div className="relative w-full aspect-[3/4] rounded-3xl overflow-hidden">
               <Image
-                src="/images/landing/collectings/1.jpg"
+                src="/images/landing/collectings/children-football-1.webp"
                 fill
                 alt={collection.title}
                 className="object-cover"
               />
             </div>
 
-            {/* Card overlapping from bottom */}
+            {/* Card Content */}
             <div className="absolute bottom-2 left-2 right-2 bg-white rounded-3xl shadow-lg p-4">
               <div className="flex flex-col gap-4">
-                <div className="flex flex-row items-center gap-1 bg-muted p-2 rounded-3xl text-xs w-fit">
+                {/* City */}
+                <div className="flex items-center gap-1 bg-muted p-2 rounded-3xl text-xs w-fit">
                   <MapPin className="w-4 h-4" />
                   <span>{city?.name}</span>
                 </div>
 
+                {/* Title */}
                 <p className="font-bold">{collection.title}</p>
 
-                {/* Progress bar */}
-                <div className="w-full bg-gray-100 rounded-full h-8">
-                  <div
-                    className="bg-default-blue h-8 rounded-full transition-all relative"
-                    style={{ width: `${percent}%` }}
-                  >
-                    <span className="text-white text-xs absolute top-1/2 -translate-y-1/2 right-3">
-                      {percent}%
-                    </span>
-                  </div>
-                </div>
+                {/* Progress */}
+                <ProgressBarWithLabel
+                  goal={collection.goal}
+                  raised={collection.raised}
+                />
 
-                <div className="flex flex-row justify-between w-full">
-                  <p className="text-default-blue text-lg font-bold">
-                    {collection.raised} ლარი
-                  </p>
-                  <p className="text-black text-lg font-bold">
-                    {collection.goal}-დან
-                  </p>
-                </div>
-
-                <div className="flex flex-row items-center justify-between gap-10">
+                {/* Contributors + Help Button */}
+                <div className="flex items-center justify-between gap-10">
+                  {/* Contributors */}
                   <div className="flex flex-col gap-2">
                     <span className="text-xs text-muted-foreground">
                       {collection.contributors.length} დაეხმარა
                     </span>
+
                     <ContributorsListDrawer
                       contributors={collection.contributors}
-                      contributorsQn={collection.contributors.length}
                       trigger={
-                        <div className="flex flex-row items-center cursor-pointer">
+                        <div
+                          className="flex items-center cursor-pointer"
+                          onClick={(e) => {
+                            e.stopPropagation(); // prevent card click
+                            setOpenCollectionId(
+                              drawerOpen ? null : collection.id
+                            );
+                          }}
+                        >
                           {visibleContributors.map((contributor, index) => (
                             <div
                               key={contributor.id}
@@ -117,9 +125,15 @@ const CollectionList = ({ collections, cities }: CollectionListProps) => {
                           </div>
                         </div>
                       }
+                      open={drawerOpen}
+                      onOpenChange={(open) =>
+                        setOpenCollectionId(open ? collection.id : null)
+                      }
                     />
                   </div>
-                  <div className="w-full">
+
+                  {/* Help Button */}
+                  <div onClick={(e) => e.stopPropagation()} className="w-full">
                     <Button className="w-full p-7 bg-default-blue text-xl">
                       დაეხმარე
                     </Button>

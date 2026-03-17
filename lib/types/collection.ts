@@ -19,10 +19,11 @@ export type Collection = {
   id: string;
   title: string;
   description?: string;
+  howWillHelp?: string;
   cityId: string;
   sportId: string;
   raised: number;
   goal: number;
-  imageUrl?: string;
+  imageUrl: string;
   contributors: Contributor[];
 };
