@@ -1,4 +1,5 @@
 "use client";
+
 import Image from "next/image";
 import { MapPin, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -6,19 +7,23 @@ import ContributorsListDrawer from "./contributors-list-drawer";
 import { City, Collection } from "@/lib/types/collection";
 import { useRouter } from "next/navigation";
 import ProgressBarWithLabel from "./progress-bar-with-label";
-import { useState } from "react";
 
-type SportCategory = { id: string; name: string };
+interface SportCategory {
+  id: string;
+  name: string;
+}
 
 interface CollectionListProps {
   collections: Collection[];
   cities: City[];
-  sports: SportCategory[];
+  sports?: SportCategory[];
 }
+
+const BLUR_DATA_URL =
+  "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkSEw8UHRofHh0aHBwgJC4nICIsIxwcKDcpLDAxNDQ0Hyc5PTgyPC4zNDL/2wBDAQkJCQwLDBgNDRgyIRwhMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjL/wAARCAAIAAoDASIAAhEBAxEB/8QAFgABAQEAAAAAAAAAAAAAAAAABgUEB//EACIQAAIBBAIDAQAAAAAAAAAAAAECAAMEERIhBRNBUf/EABUBAQEAAAAAAAAAAAAAAAAAAAIF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECAxESIf/aAAwDAQACEQMRAD8Aqz1tpIe3jilhiijXHPjljb3KjOMDOcfFQ3mnuoUNFdSRsN/yDkH71CapNJNaRO7FmMYyT71Bb3EsEuyNyoPOMYB+q1KKlFPQVOTSP//Z";
 
 const CollectionList = ({ collections, cities }: CollectionListProps) => {
   const router = useRouter();
-  const [openCollectionId, setOpenCollectionId] = useState<string | null>(null);
 
   if (collections.length === 0) {
     return (
@@ -30,28 +35,28 @@ const CollectionList = ({ collections, cities }: CollectionListProps) => {
 
   return (
     <div className="space-y-6 w-full">
-      {collections.map((collection) => {
+      {collections.map((collection, index) => {
         const city = cities.find((ci) => ci.id === collection.cityId);
         const visibleContributors = collection.contributors.slice(0, 3);
-        const drawerOpen = openCollectionId === collection.id;
 
         return (
           <div
             key={collection.id}
             className="relative shadow-xl rounded-3xl cursor-pointer"
             onClick={() => {
-              if (!drawerOpen) {
-                router.push(`/platform/collection/${collection.id}`);
-              }
+              router.push(`/platform/collection/${collection.id}`);
             }}
           >
             {/* Collection Image */}
-            <div className="relative w-full aspect-[3/4] rounded-3xl overflow-hidden">
+            <div className="relative w-full aspect-[3/4] rounded-3xl overflow-hidden bg-muted">
               <Image
                 src="/images/landing/collectings/children-football-1.webp"
                 fill
                 alt={collection.title}
-                className="object-cover"
+                className="object-cover transition-opacity duration-500 opacity-100"
+                priority={index === 0}
+                placeholder="blur"
+                blurDataURL={BLUR_DATA_URL}
               />
             </div>
 
@@ -84,22 +89,14 @@ const CollectionList = ({ collections, cities }: CollectionListProps) => {
                     <ContributorsListDrawer
                       contributors={collection.contributors}
                       trigger={
-                        <div
-                          className="flex items-center cursor-pointer"
-                          onClick={(e) => {
-                            e.stopPropagation(); // prevent card click
-                            setOpenCollectionId(
-                              drawerOpen ? null : collection.id
-                            );
-                          }}
-                        >
-                          {visibleContributors.map((contributor, index) => (
+                        <div className="flex items-center cursor-pointer">
+                          {visibleContributors.map((contributor, i) => (
                             <div
                               key={contributor.id}
                               className="w-8 h-8 rounded-full border-2 border-white overflow-hidden"
                               style={{
-                                marginLeft: index === 0 ? 0 : "-10px",
-                                zIndex: index,
+                                marginLeft: i === 0 ? 0 : "-10px",
+                                zIndex: i,
                               }}
                             >
                               <Image
@@ -110,6 +107,8 @@ const CollectionList = ({ collections, cities }: CollectionListProps) => {
                                 alt="user-image"
                                 height={32}
                                 width={32}
+                                placeholder="blur"
+                                blurDataURL={BLUR_DATA_URL}
                                 className="rounded-full object-cover w-full h-full"
                               />
                             </div>
@@ -125,15 +124,11 @@ const CollectionList = ({ collections, cities }: CollectionListProps) => {
                           </div>
                         </div>
                       }
-                      open={drawerOpen}
-                      onOpenChange={(open) =>
-                        setOpenCollectionId(open ? collection.id : null)
-                      }
                     />
                   </div>
 
                   {/* Help Button */}
-                  <div onClick={(e) => e.stopPropagation()} className="w-full">
+                  <div className="w-full" onClick={(e) => e.stopPropagation()}>
                     <Button className="w-full p-7 bg-default-blue text-xl">
                       დაეხმარე
                     </Button>
