@@ -27,7 +27,7 @@ const links = [
   {
     id: "center",
     label: "",
-    href: "/platform/new",
+    href: "/platform/piggy",
     icon: PiggyBank,
     center: true,
   },

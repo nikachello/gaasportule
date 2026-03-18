@@ -50,7 +50,7 @@ const CollectionList = ({ collections, cities }: CollectionListProps) => {
             {/* Collection Image */}
             <div className="relative w-full aspect-[3/4] rounded-3xl overflow-hidden bg-muted">
               <Image
-                src="/images/landing/collectings/children-football-1.webp"
+                src={`${collection.imageUrl}`}
                 fill
                 alt={collection.title}
                 className="object-cover transition-opacity duration-500 opacity-100"
