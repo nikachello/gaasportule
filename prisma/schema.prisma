@@ -12,8 +12,6 @@ datasource db {
   provider = "postgresql"
 }
 
-
-
 // ---------------------------------
 // AUTH (Better Auth compatible)
 // ---------------------------------
@@ -23,7 +21,7 @@ model User {
   name          String
   email         String   @unique
   emailVerified Boolean  @default(false)
-  image         String?
+  image         String? @default("/images/user/default-avatar.png")
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 
@@ -31,6 +29,8 @@ model User {
   accounts      Account[]
   contributions Contribution[]
   transactions  Transaction[]
+
+  @@map("user")
 }
 
 model Session {
@@ -44,6 +44,9 @@ model Session {
   updatedAt DateTime @updatedAt
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("session")
 }
 
 model Account {
@@ -62,6 +65,9 @@ model Account {
   updatedAt             DateTime  @updatedAt
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("account")
 }
 
 model Verification {
@@ -71,6 +77,9 @@ model Verification {
   expiresAt  DateTime
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
+
+  @@index([identifier])
+  @@map("verification")
 }
 
 // ---------------------------------
@@ -97,7 +106,7 @@ model Collection {
   goal        Int
   raised      Int      @default(0)
   imageUrl    String
-  isActive    Boolean  @default(true)
+  status      CollectionStatus @default(ACTIVE)
   cityId      String
   sportId     String
   createdAt   DateTime @default(now())
@@ -109,11 +118,11 @@ model Collection {
 }
 
 model Contribution {
-  id            String       @id @default(cuid())
-  userId        String
-  collectionId  String
-  amount        Int
-  createdAt     DateTime     @default(now())
+  id           String   @id @default(cuid())
+  userId       String
+  collectionId String
+  amount       Int
+  createdAt    DateTime @default(now())
 
   transactionId String?      @unique
   transaction   Transaction? @relation(fields: [transactionId], references: [id])
@@ -153,4 +162,11 @@ enum TransactionStatus {
   CANCELLED
   REFUNDED
   EXPIRED
+}
+
+
+enum CollectionStatus {
+  ACTIVE
+  COMPLETED
+  CLOSED
 }

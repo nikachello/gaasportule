@@ -32,10 +32,7 @@ export default function RootLayout({
   return (
     <html lang="ka">
       <body className={`${bpgGlaho.variable} font-georgian antialiased`}>
-        <div>
-          {/* <GlassNavbar /> */}
-          {children}
-        </div>
+        <div>{children}</div>
       </body>
     </html>
   );
