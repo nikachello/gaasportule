@@ -1,0 +1,156 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client"
+  output   = "../lib/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+
+
+// ---------------------------------
+// AUTH (Better Auth compatible)
+// ---------------------------------
+
+model User {
+  id            String   @id @default(cuid())
+  name          String
+  email         String   @unique
+  emailVerified Boolean  @default(false)
+  image         String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  sessions      Session[]
+  accounts      Account[]
+  contributions Contribution[]
+  transactions  Transaction[]
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  userId    String
+  token     String   @unique
+  expiresAt DateTime
+  ipAddress String?
+  userAgent String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Account {
+  id                    String    @id @default(cuid())
+  userId                String
+  accountId             String
+  providerId            String
+  accessToken           String?
+  refreshToken          String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  idToken               String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Verification {
+  id         String   @id @default(cuid())
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+// ---------------------------------
+// DOMAIN
+// ---------------------------------
+
+model City {
+  id          String       @id @default(cuid())
+  name        String
+  collections Collection[]
+}
+
+model SportCategory {
+  id          String       @id @default(cuid())
+  name        String
+  collections Collection[]
+}
+
+model Collection {
+  id          String   @id @default(cuid())
+  title       String
+  description String?
+  howWillHelp String?
+  goal        Int
+  raised      Int      @default(0)
+  imageUrl    String
+  isActive    Boolean  @default(true)
+  cityId      String
+  sportId     String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  city          City           @relation(fields: [cityId], references: [id])
+  sport         SportCategory  @relation(fields: [sportId], references: [id])
+  contributions Contribution[]
+}
+
+model Contribution {
+  id            String       @id @default(cuid())
+  userId        String
+  collectionId  String
+  amount        Int
+  createdAt     DateTime     @default(now())
+
+  transactionId String?      @unique
+  transaction   Transaction? @relation(fields: [transactionId], references: [id])
+
+  user       User       @relation(fields: [userId], references: [id])
+  collection Collection @relation(fields: [collectionId], references: [id])
+}
+
+model Transaction {
+  id             String            @id @default(cuid())
+  userId         String
+  collectionId   String
+  amount         Int
+  currency       String            @default("GEL")
+  status         TransactionStatus @default(PENDING)
+  bogOrderId     String            @unique
+  bogPaymentId   String?
+  bogRedirectUrl String?
+  createdAt      DateTime          @default(now())
+  updatedAt      DateTime          @updatedAt
+
+  user         User          @relation(fields: [userId], references: [id])
+  contribution Contribution?
+}
+
+model SupportMessage {
+  id        String   @id @default(cuid())
+  email     String
+  message   String
+  createdAt DateTime @default(now())
+}
+
+enum TransactionStatus {
+  PENDING
+  SUCCESS
+  FAILED
+  CANCELLED
+  REFUNDED
+  EXPIRED
+}
