@@ -14,16 +14,7 @@ const rankIcon = (index: number) => {
 };
 
 const Page = async () => {
-  const rawRankings = await getRankings();
-
-  const rankings = rawRankings
-    .map((user) => ({
-      id: user.id,
-      name: user.name,
-      image: user.image,
-      amount: user.contributions.reduce((sum, c) => sum + c.amount, 0),
-    }))
-    .sort((a, b) => b.amount - a.amount);
+  const rankings = await getRankings();
 
   if (rankings.length === 0) {
     return (

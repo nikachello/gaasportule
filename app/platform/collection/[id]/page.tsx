@@ -37,6 +37,7 @@ const CollectionPage = async ({ params }: Props) => {
     id: c.id,
     name: c.user.name,
     avatarUrl: c.user.image ?? undefined,
+
     contributedAmount: c.amount,
   }));
 

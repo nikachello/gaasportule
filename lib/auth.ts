@@ -14,6 +14,9 @@ export const auth = betterAuth({
       role: {
         type: "string",
       },
+      isAnonymous: {
+        type: "boolean",
+      },
     },
   },
   socialProviders: {
