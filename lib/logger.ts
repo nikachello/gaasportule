@@ -1,8 +1,6 @@
-import { Logger } from "next-axiom";
+import { log as axiomLog } from "next-axiom";
 
 type LogData = Record<string, unknown>;
-
-const axiomLogger = new Logger();
 
 export const log = {
   info: (message: string, data?: LogData) => {
@@ -10,21 +8,20 @@ export const log = {
       console.log(`🟢 [INFO] ${message}`, data ?? "");
       return;
     }
-    axiomLogger.info(message, data);
+    axiomLog.info(message, data);
   },
   warn: (message: string, data?: LogData) => {
     if (process.env.NODE_ENV === "development") {
       console.warn(`🟡 [WARN] ${message}`, data ?? "");
       return;
     }
-    axiomLogger.warn(message, data);
+    axiomLog.warn(message, data);
   },
   error: (message: string, data?: LogData) => {
     if (process.env.NODE_ENV === "development") {
       console.error(`🔴 [ERROR] ${message}`, data ?? "");
       return;
     }
-    axiomLogger.error(message, data);
+    axiomLog.error(message, data);
   },
-  flush: () => axiomLogger.flush(),
 };
