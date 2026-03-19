@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import CollectingFilter from "./collections/collecting-filter";
 import CollectionList from "./collections/collection-list";
 
-import { City, Collection, SportCategory } from "@/lib/generated/prisma/client";
+import { City, SportCategory } from "@/lib/generated/prisma/client";
 import { CollectionWithRelations } from "@/lib/types/collection";
 
 interface OpenCollectingsProps {

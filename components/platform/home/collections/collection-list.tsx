@@ -7,7 +7,7 @@ import ContributorsListDrawer from "./contributors-list-drawer";
 import { CollectionWithRelations } from "@/lib/types/collection";
 import { useRouter } from "next/navigation";
 import ProgressBarWithLabel from "./progress-bar-with-label";
-import { City, Collection } from "@/lib/generated/prisma/client";
+import { City } from "@/lib/generated/prisma/client";
 
 interface SportCategory {
   id: string;

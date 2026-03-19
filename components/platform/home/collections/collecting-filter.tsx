@@ -8,7 +8,7 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer";
-import { City, SportCategory } from "@/lib/types/collection";
+import { City, SportCategory } from "@/lib/generated/prisma/client";
 
 interface CollectingFilterProps {
   type: "sport_category" | "city";

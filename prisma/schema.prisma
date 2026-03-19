@@ -30,6 +30,8 @@ model User {
   contributions Contribution[]
   transactions  Transaction[]
 
+  role UserRole @default(USER)
+
   @@map("user")
 }
 
@@ -152,6 +154,7 @@ model SupportMessage {
   id        String   @id @default(cuid())
   email     String
   message   String
+  isRead    Boolean  @default(false)
   createdAt DateTime @default(now())
 }
 
@@ -169,4 +172,9 @@ enum CollectionStatus {
   ACTIVE
   COMPLETED
   CLOSED
+}
+
+enum UserRole {
+  USER
+  ADMIN
 }

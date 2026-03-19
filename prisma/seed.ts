@@ -21,14 +21,14 @@ async function main() {
     data: { name: "სამეგრელო-ზემო სვანეთი" },
   });
   const kakheti = await prisma.city.create({ data: { name: "კახეთი" } });
-  const shidaQartli = await prisma.city.create({
+  await prisma.city.create({
     data: { name: "შიდა ქართლი" },
   });
-  const samtskhe = await prisma.city.create({
+  await prisma.city.create({
     data: { name: "სამცხე-ჯავახეთი" },
   });
-  const guria = await prisma.city.create({ data: { name: "გურია" } });
-  const mtskheta = await prisma.city.create({
+  await prisma.city.create({ data: { name: "გურია" } });
+  await prisma.city.create({
     data: { name: "მცხეთა-მთიანეთი" },
   });
 
