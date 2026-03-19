@@ -2,8 +2,9 @@
 
 import { revalidatePath } from "next/cache";
 import { createSupportMessage } from "@/lib/repositories/support.repository";
+import { requireAdmin } from "@/lib/admin";
+import { log } from "@/lib/logger";
 import prisma from "../prisma";
-import { requireAdmin } from "../admin";
 
 export const submitSupportMessage = async ({
   email,
@@ -14,20 +15,37 @@ export const submitSupportMessage = async ({
 }) => {
   try {
     await createSupportMessage({ email, message });
+    log.info("Support message submitted", { email });
     return { success: true };
-  } catch {
+  } catch (error) {
+    log.error("Failed to submit support message", {
+      email,
+      error: String(error),
+    });
     return { success: false, error: "შეტყობინება ვერ გაიგზავნა" };
   }
 };
 
 export const markSupportMessageAsRead = async (id: string) => {
-  await requireAdmin();
+  const session = await requireAdmin();
 
-  await prisma.supportMessage.update({
-    where: { id },
-    data: { isRead: true },
-  });
+  try {
+    await prisma.supportMessage.update({
+      where: { id },
+      data: { isRead: true },
+    });
 
-  revalidatePath("/manage-gsp-m-c/support");
-  revalidatePath("/manage-gsp-m-c");
+    log.info("Support message marked as read", {
+      messageId: id,
+      adminId: session.user.id,
+    });
+
+    revalidatePath("/manage-gsp-m-c/support");
+    revalidatePath("/manage-gsp-m-c");
+  } catch (error) {
+    log.error("Failed to mark support message as read", {
+      messageId: id,
+      error: String(error),
+    });
+  }
 };

@@ -2,8 +2,9 @@
 
 import { CollectionStatus } from "@/lib/generated/prisma/client";
 import { revalidatePath } from "next/cache";
+import { requireAdmin } from "@/lib/admin";
+import { log } from "@/lib/logger";
 import prisma from "../prisma";
-import { requireAdmin } from "../admin";
 
 export const updateCollectionStatus = async ({
   id,
@@ -12,15 +13,29 @@ export const updateCollectionStatus = async ({
   id: string;
   status: CollectionStatus;
 }) => {
-  await requireAdmin();
-  await prisma.collection.update({
-    where: { id },
-    data: { status },
-  });
+  const session = await requireAdmin();
 
-  revalidatePath("/manage-gsp-m-c/collections");
-  revalidatePath(`/manage-gsp-m-c/collections/${id}`);
-  revalidatePath("/platform");
+  try {
+    await prisma.collection.update({
+      where: { id },
+      data: { status },
+    });
+
+    log.info("Collection status updated", {
+      collectionId: id,
+      status,
+      adminId: session.user.id,
+    });
+
+    revalidatePath("/manage-gsp-m-c/collections");
+    revalidatePath(`/manage-gsp-m-c/collections/${id}`);
+    revalidatePath("/platform");
+  } catch (error) {
+    log.error("Failed to update collection status", {
+      collectionId: id,
+      error: String(error),
+    });
+  }
 };
 
 export const createCollection = async ({
@@ -40,9 +55,10 @@ export const createCollection = async ({
   cityId: string;
   sportId: string;
 }) => {
-  await requireAdmin();
+  const session = await requireAdmin();
+
   try {
-    await prisma.collection.create({
+    const collection = await prisma.collection.create({
       data: {
         title,
         description,
@@ -54,11 +70,21 @@ export const createCollection = async ({
       },
     });
 
+    log.info("Collection created", {
+      collectionId: collection.id,
+      title,
+      adminId: session.user.id,
+    });
+
     revalidatePath("/manage-gsp-m-c/collections");
     revalidatePath("/platform");
 
     return { success: true };
-  } catch {
+  } catch (error) {
+    log.error("Failed to create collection", {
+      title,
+      error: String(error),
+    });
     return { error: "შექმნა ვერ მოხერხდა" };
   }
 };
@@ -72,22 +98,47 @@ export const addCollectionDocument = async ({
   name: string;
   url: string;
 }) => {
-  await requireAdmin();
+  const session = await requireAdmin();
 
-  const doc = await prisma.collectionDocument.create({
-    data: { collectionId, name, url },
-  });
+  try {
+    const doc = await prisma.collectionDocument.create({
+      data: { collectionId, name, url },
+    });
 
-  revalidatePath(`/manage-gsp-m-c/collections/${collectionId}`);
-  revalidatePath(`/platform/collection/${collectionId}`);
+    log.info("Collection document added", {
+      collectionId,
+      documentId: doc.id,
+      name,
+      adminId: session.user.id,
+    });
 
-  return doc;
+    revalidatePath(`/manage-gsp-m-c/collections/${collectionId}`);
+    revalidatePath(`/platform/collection/${collectionId}`);
+
+    return doc;
+  } catch (error) {
+    log.error("Failed to add collection document", {
+      collectionId,
+      error: String(error),
+    });
+    return null;
+  }
 };
 
 export const removeCollectionDocument = async (id: string) => {
-  await requireAdmin();
+  const session = await requireAdmin();
 
-  await prisma.collectionDocument.delete({
-    where: { id },
-  });
+  try {
+    await prisma.collectionDocument.delete({ where: { id } });
+
+    log.info("Collection document removed", {
+      documentId: id,
+      adminId: session.user.id,
+    });
+  } catch (error) {
+    log.error("Failed to remove collection document", {
+      documentId: id,
+      error: String(error),
+    });
+  }
 };
