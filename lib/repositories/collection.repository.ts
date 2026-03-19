@@ -16,6 +16,7 @@ export const getCollections = async ({
     include: {
       city: true,
       sport: true,
+      documents: true,
       contributions: {
         include: {
           user: {

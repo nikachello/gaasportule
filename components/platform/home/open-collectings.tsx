@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import { useState } from "react";
 import CollectingFilter from "./collections/collecting-filter";
 import CollectionList from "./collections/collection-list";
 
