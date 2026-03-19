@@ -3,16 +3,47 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Info } from "lucide-react";
+import { submitSupportMessage } from "@/lib/actions/support.action";
 
 const Page = () => {
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [sent, setSent] = useState(false);
+
+  const handleSubmit = async () => {
+    setLoading(true);
+    const result = await submitSupportMessage({ email, message });
+    setLoading(false);
+
+    if (result.success) {
+      setSent(true);
+      setEmail("");
+      setMessage("");
+    }
+  };
+
+  if (sent) {
+    return (
+      <div className="flex flex-col min-h-screen items-center justify-center p-4 gap-4 text-center">
+        <h1 className="text-2xl font-bold">გაგზავნილია</h1>
+        <p className="text-muted-foreground text-sm">
+          ჩვენი გუნდი დაგიკავშირდებათ 24 საათის განმავლობაში.
+        </p>
+        <Button
+          onClick={() => setSent(false)}
+          className="bg-default-blue rounded-2xl px-8 py-6"
+        >
+          დახურვა
+        </Button>
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col min-h-screen p-4 pb-10 space-y-4">
       <h1 className="font-bold text-2xl text-center">დახმარება</h1>
       <div className="flex flex-col gap-6 flex-1">
-        {/* Email input */}
         <div className="flex flex-col gap-2">
           <label className="text-sm text-muted-foreground font-medium">
             ელ. ფოსტა
@@ -26,7 +57,6 @@ const Page = () => {
           />
         </div>
 
-        {/* Message input */}
         <div className="flex flex-col gap-2">
           <label className="text-sm text-muted-foreground font-medium">
             შეტყობინება
@@ -40,7 +70,6 @@ const Page = () => {
           />
         </div>
 
-        {/* Disclaimer */}
         <div className="bg-muted rounded-2xl p-4 flex gap-3">
           <Info className="w-4 h-4 mt-0.5 shrink-0 text-muted-foreground" />
           <div className="flex flex-col gap-1">
@@ -54,13 +83,13 @@ const Page = () => {
         </div>
       </div>
 
-      {/* Submit button */}
       <div className="mt-6">
         <Button
-          disabled={!email || !message}
+          onClick={handleSubmit}
+          disabled={!email || !message || loading}
           className="w-full py-7 text-lg font-semibold rounded-2xl bg-default-blue disabled:opacity-40"
         >
-          გაგზავნა
+          {loading ? "იგზავნება..." : "გაგზავნა"}
         </Button>
       </div>
     </div>

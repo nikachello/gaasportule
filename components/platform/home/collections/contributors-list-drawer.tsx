@@ -8,8 +8,14 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer";
-import { Contributor } from "@/lib/types/collection";
 import Image from "next/image";
+
+type Contributor = {
+  id: string;
+  name: string;
+  avatarUrl?: string;
+  contributedAmount: number;
+};
 
 type Props = {
   contributors: Contributor[];

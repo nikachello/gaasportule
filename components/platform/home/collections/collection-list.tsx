@@ -4,9 +4,10 @@ import Image from "next/image";
 import { MapPin, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import ContributorsListDrawer from "./contributors-list-drawer";
-import { City, Collection } from "@/lib/types/collection";
+import { CollectionWithRelations } from "@/lib/types/collection";
 import { useRouter } from "next/navigation";
 import ProgressBarWithLabel from "./progress-bar-with-label";
+import { City, Collection } from "@/lib/generated/prisma/client";
 
 interface SportCategory {
   id: string;
@@ -14,7 +15,7 @@ interface SportCategory {
 }
 
 interface CollectionListProps {
-  collections: Collection[];
+  collections: CollectionWithRelations[];
   cities: City[];
   sports?: SportCategory[];
 }
@@ -37,7 +38,7 @@ const CollectionList = ({ collections, cities }: CollectionListProps) => {
     <div className="space-y-6 w-full">
       {collections.map((collection, index) => {
         const city = cities.find((ci) => ci.id === collection.cityId);
-        const visibleContributors = collection.contributors.slice(0, 3);
+        const visibleContributors = collection.contributions.slice(0, 3);
 
         return (
           <div
@@ -83,11 +84,16 @@ const CollectionList = ({ collections, cities }: CollectionListProps) => {
                   {/* Contributors */}
                   <div className="flex flex-col gap-2">
                     <span className="text-xs text-muted-foreground">
-                      {collection.contributors.length} დაეხმარა
+                      {collection.contributions.length} დაეხმარა
                     </span>
 
                     <ContributorsListDrawer
-                      contributors={collection.contributors}
+                      contributors={collection.contributions.map((c) => ({
+                        id: c.id,
+                        name: c.user.name,
+                        avatarUrl: c.user.image ?? undefined,
+                        contributedAmount: c.amount,
+                      }))}
                       trigger={
                         <div className="flex items-center cursor-pointer">
                           {visibleContributors.map((contributor, i) => (
@@ -101,7 +107,7 @@ const CollectionList = ({ collections, cities }: CollectionListProps) => {
                             >
                               <Image
                                 src={
-                                  contributor.avatarUrl ??
+                                  contributor.user.image ??
                                   "/images/user/default-avatar.png"
                                 }
                                 alt="user-image"

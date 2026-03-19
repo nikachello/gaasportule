@@ -2,7 +2,10 @@ import CollectionList from "@/components/platform/home/collections/collection-li
 import ContributorsListDrawer from "@/components/platform/home/collections/contributors-list-drawer";
 import ProgressBarWithLabel from "@/components/platform/home/collections/progress-bar-with-label";
 import { Separator } from "@/components/ui/separator";
-import { MOCK_CITIES, MOCK_COLLECTIONS, MOCK_SPORTS } from "@/lib/mock/data";
+import {
+  getCollectionById,
+  getSimilarCollections,
+} from "@/lib/repositories/collection.repository";
 import {
   ArrowRight,
   GalleryVerticalEnd,
@@ -11,6 +14,7 @@ import {
   ShieldCheck,
 } from "lucide-react";
 import Image from "next/image";
+import { notFound } from "next/navigation";
 
 type Props = {
   params: Promise<{ id: string }>;
@@ -19,17 +23,21 @@ type Props = {
 const CollectionPage = async ({ params }: Props) => {
   const { id } = await params;
 
-  const collection = MOCK_COLLECTIONS.find((c) => c.id === id);
-  const city = MOCK_CITIES.find((city) => city.id === collection?.cityId);
-  const sport = MOCK_SPORTS.find((sport) => sport.id === collection?.sportId);
+  const collection = await getCollectionById(id);
 
-  if (!collection) {
-    return <p>ქველმოქმედება ვერ მოიძებნა</p>;
-  }
+  if (!collection) return notFound();
 
-  const similarCollections = MOCK_COLLECTIONS.filter(
-    (c) => c.sportId === collection.sportId && c.id !== collection.id
-  ).slice(0, 3);
+  const similarCollections = await getSimilarCollections(
+    collection.sportId,
+    collection.id
+  );
+
+  const contributors = collection.contributions.map((c) => ({
+    id: c.id,
+    name: c.user.name,
+    avatarUrl: c.user.image ?? undefined,
+    contributedAmount: c.amount,
+  }));
 
   return (
     <div className="w-full space-y-4">
@@ -53,38 +61,39 @@ const CollectionPage = async ({ params }: Props) => {
           <p className="text-muted-foreground text-base">
             {collection.description}
           </p>
-          <p className="text-sm text-muted-foreground">{city?.name}</p>
+          <p className="text-sm text-muted-foreground">
+            {collection.city.name}
+          </p>
         </div>
+
         {/* Sport tag */}
         <div className="flex justify-center">
           <span className="bg-muted px-4 py-2 rounded-xl text-xs">
-            {sport?.name}
+            {collection.sport.name}
           </span>
         </div>
+
         {/* Progress */}
-        <div>
-          <ProgressBarWithLabel
-            goal={collection.goal}
-            raised={collection.raised}
-          />
-        </div>
+        <ProgressBarWithLabel
+          goal={collection.goal}
+          raised={collection.raised}
+        />
+
         {/* Contributors card */}
-        <div className="rounded-xl bg-muted p-4 space-y-4 hover:bg-red-200 transition-colors">
+        <div className="rounded-xl bg-muted p-4 space-y-4">
           <ContributorsListDrawer
-            contributors={collection.contributors}
+            contributors={contributors}
             trigger={
               <div className="flex items-center gap-4">
                 <HandCoins className="bg-white w-10 h-10 p-2 rounded-lg shrink-0" />
-
                 <div className="flex flex-col w-full">
                   <span className="text-xs text-muted-foreground">
                     უკვე დაეხმარა
                   </span>
                   <span className="font-semibold text-base">
-                    {collection.contributors.length} ადამიანი
+                    {contributors.length} ადამიანი
                   </span>
                 </div>
-
                 <ArrowRight className="shrink-0" />
               </div>
             }
@@ -93,7 +102,7 @@ const CollectionPage = async ({ params }: Props) => {
           <Separator />
 
           <div className="flex gap-2 overflow-x-auto no-scrollbar">
-            {collection.contributors.slice(-10).map((contributor) => (
+            {contributors.slice(-10).map((contributor) => (
               <div
                 key={contributor.id}
                 className="flex items-center gap-2 bg-white rounded-full px-3 py-1.5 shrink-0"
@@ -114,12 +123,16 @@ const CollectionPage = async ({ params }: Props) => {
             ))}
           </div>
         </div>
+
+        {/* How will help */}
         {collection.howWillHelp && (
           <div className="space-y-4">
             <h1 className="text-left font-bold text-lg">როგორ დავეხმარებით</h1>
             <p>{collection.howWillHelp}</p>
           </div>
         )}
+
+        {/* Documents */}
         <div className="bg-muted rounded-2xl p-4 space-y-4">
           <p className="font-bold">დოკუმენტები და ანგარიში</p>
           <p>
@@ -139,12 +152,13 @@ const CollectionPage = async ({ params }: Props) => {
             <p>დაცული ტრანზაქციები</p>
           </div>
         </div>
+
+        {/* Similar collections */}
         <div className="space-y-4">
           <h1 className="font-bold text-lg">მსგავსი ქველმოქმედებები</h1>
           <CollectionList
             collections={similarCollections}
-            cities={MOCK_CITIES}
-            sports={MOCK_SPORTS}
+            cities={similarCollections.map((c) => c.city)}
           />
         </div>
       </div>

@@ -10,20 +10,20 @@ interface Tab {
 interface TabsProps {
   tabs: Tab[];
   defaultValue?: string;
-  children: (activeTab: string) => React.ReactNode;
+  content: Record<string, React.ReactNode>;
 }
 
-export function Tabs({ tabs, defaultValue, children }: TabsProps) {
+export function Tabs({ tabs, defaultValue, content }: TabsProps) {
   const [active, setActive] = useState(defaultValue ?? tabs[0].value);
 
   return (
     <div className="space-y-4">
-      <div className="flex w-full rounded-4xl bg-muted p-1 gap-1">
+      <div className="flex w-full rounded-xl bg-gray-100 p-1 gap-1">
         {tabs.map((tab) => (
           <button
             key={tab.value}
             onClick={() => setActive(tab.value)}
-            className="flex-1 py-3 px-4 rounded-4xl text-sm font-medium transition-all duration-200"
+            className="flex-1 py-3 px-4 rounded-lg text-sm font-medium transition-all duration-200"
             style={{
               background: active === tab.value ? "white" : "transparent",
               color: active === tab.value ? "#111" : "#888",
@@ -35,7 +35,7 @@ export function Tabs({ tabs, defaultValue, children }: TabsProps) {
           </button>
         ))}
       </div>
-      <div>{children(active)}</div>
+      <div>{content[active]}</div>
     </div>
   );
 }

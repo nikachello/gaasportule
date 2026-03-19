@@ -2,14 +2,25 @@
 import React, { useState } from "react";
 import CollectingFilter from "./collections/collecting-filter";
 import CollectionList from "./collections/collection-list";
-import { City } from "@/lib/types/collection";
-import { MOCK_CITIES, MOCK_COLLECTIONS, MOCK_SPORTS } from "@/lib/mock/data";
 
-const OpenCollectings = () => {
+import { City, Collection, SportCategory } from "@/lib/generated/prisma/client";
+import { CollectionWithRelations } from "@/lib/types/collection";
+
+interface OpenCollectingsProps {
+  collections: CollectionWithRelations[];
+  cities: City[];
+  sports: SportCategory[];
+}
+
+const OpenCollectings = ({
+  collections,
+  cities,
+  sports,
+}: OpenCollectingsProps) => {
   const [selectedRegions, setSelectedRegions] = useState<City[]>([]);
   const [selectedSportId, setSelectedSportId] = useState<string | null>(null);
 
-  const filtered = MOCK_COLLECTIONS.filter((c) => {
+  const filtered = collections.filter((c) => {
     const regionMatch =
       selectedRegions.length === 0 ||
       selectedRegions.some((r) => r.id === c.cityId);
@@ -27,20 +38,16 @@ const OpenCollectings = () => {
           type="city"
           selectedRegions={selectedRegions}
           onRegionsChange={setSelectedRegions}
-          cities={MOCK_CITIES}
+          cities={cities}
         />
         <CollectingFilter
           type="sport_category"
           selectedSportId={selectedSportId}
           onSportChange={setSelectedSportId}
-          sports={MOCK_SPORTS}
+          sports={sports}
         />
       </div>
-      <CollectionList
-        collections={filtered}
-        cities={MOCK_CITIES}
-        sports={MOCK_SPORTS}
-      />
+      <CollectionList collections={filtered} cities={cities} sports={sports} />
     </div>
   );
 };
