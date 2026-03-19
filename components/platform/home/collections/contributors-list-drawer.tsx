@@ -33,7 +33,7 @@ const ContributorsListDrawer = ({
   onOpenChange,
 }: Props) => {
   return (
-    <Drawer open={open} onOpenChange={onOpenChange} modal>
+    <Drawer open={open} onOpenChange={onOpenChange}>
       <DrawerTrigger asChild>
         <div>{trigger}</div>
       </DrawerTrigger>

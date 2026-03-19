@@ -82,7 +82,10 @@ const CollectionList = ({ collections, cities }: CollectionListProps) => {
                 {/* Contributors + Help Button */}
                 <div className="flex items-center justify-between gap-10">
                   {/* Contributors */}
-                  <div className="flex flex-col gap-2">
+                  <div
+                    className="flex flex-col gap-2"
+                    onClick={(e) => e.stopPropagation()}
+                  >
                     <span className="text-xs text-muted-foreground">
                       {collection.contributions.length} დაეხმარა
                     </span>
@@ -135,7 +138,14 @@ const CollectionList = ({ collections, cities }: CollectionListProps) => {
 
                   {/* Help Button */}
                   <div className="w-full" onClick={(e) => e.stopPropagation()}>
-                    <Button className="w-full p-7 bg-default-blue text-xl">
+                    <Button
+                      className="w-full p-7 bg-default-blue text-xl"
+                      onClick={() =>
+                        router.push(
+                          `/platform/collection/${collection.id}/donate`
+                        )
+                      }
+                    >
                       დაეხმარე
                     </Button>
                   </div>

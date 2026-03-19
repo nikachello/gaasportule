@@ -111,12 +111,25 @@ model Collection {
   status      CollectionStatus @default(ACTIVE)
   cityId      String
   sportId     String
+
+  documents CollectionDocument[]
+
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
   city          City           @relation(fields: [cityId], references: [id])
   sport         SportCategory  @relation(fields: [sportId], references: [id])
   contributions Contribution[]
+}
+
+model CollectionDocument {
+  id           String   @id @default(cuid())
+  collectionId String
+  name         String
+  url          String
+  createdAt    DateTime @default(now())
+
+  collection Collection @relation(fields: [collectionId], references: [id], onDelete: Cascade)
 }
 
 model Contribution {

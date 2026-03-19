@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { City, SportCategory } from "@/lib/generated/prisma/client";
 import { createCollection } from "@/lib/actions/collection.action";
+import { ImageUpload } from "@/components/upload/image-upload";
 
 type Props = {
   cities: City[];
@@ -11,6 +12,8 @@ type Props = {
 };
 
 export const CreateCollectionForm = ({ cities, sports }: Props) => {
+  console.log(cities, sports);
+
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -111,14 +114,10 @@ export const CreateCollectionForm = ({ cities, sports }: Props) => {
       </div>
 
       <div className="space-y-2">
-        <label className={labelClass}>სურათის URL</label>
-        <input
-          name="imageUrl"
+        <label className={labelClass}>სურათი</label>
+        <ImageUpload
           value={form.imageUrl}
-          onChange={handleChange}
-          required
-          placeholder="https://..."
-          className={inputClass}
+          onChange={(url) => setForm((prev) => ({ ...prev, imageUrl: url }))}
         />
       </div>
 
