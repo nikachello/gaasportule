@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import prisma from "@/lib/prisma";
 import { CollectionStatusForm } from "./collection-status-form";
+import { DocumentUpload } from "@/components/upload/document-upload";
 
 type Props = {
   params: Promise<{ id: string }>;
@@ -14,6 +15,7 @@ const ManageCollectionPage = async ({ params }: Props) => {
     include: {
       city: true,
       sport: true,
+      documents: true,
       contributions: {
         include: {
           user: { select: { id: true, name: true, email: true } },
@@ -58,6 +60,14 @@ const ManageCollectionPage = async ({ params }: Props) => {
         id={collection.id}
         currentStatus={collection.status}
       />
+
+      <div className="space-y-3">
+        <h2 className="font-bold">დოკუმენტები</h2>
+        <DocumentUpload
+          collectionId={collection.id}
+          existing={collection.documents}
+        />
+      </div>
 
       {/* Contributors */}
       <div className="space-y-3">

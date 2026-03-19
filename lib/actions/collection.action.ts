@@ -62,3 +62,32 @@ export const createCollection = async ({
     return { error: "შექმნა ვერ მოხერხდა" };
   }
 };
+
+export const addCollectionDocument = async ({
+  collectionId,
+  name,
+  url,
+}: {
+  collectionId: string;
+  name: string;
+  url: string;
+}) => {
+  await requireAdmin();
+
+  const doc = await prisma.collectionDocument.create({
+    data: { collectionId, name, url },
+  });
+
+  revalidatePath(`/manage-gsp-m-c/collections/${collectionId}`);
+  revalidatePath(`/platform/collection/${collectionId}`);
+
+  return doc;
+};
+
+export const removeCollectionDocument = async (id: string) => {
+  await requireAdmin();
+
+  await prisma.collectionDocument.delete({
+    where: { id },
+  });
+};

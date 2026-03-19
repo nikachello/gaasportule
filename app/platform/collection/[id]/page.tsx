@@ -8,6 +8,7 @@ import {
 } from "@/lib/repositories/collection.repository";
 import {
   ArrowRight,
+  FileText,
   GalleryVerticalEnd,
   HandCoins,
   Lock,
@@ -132,9 +133,7 @@ const CollectionPage = async ({ params }: Props) => {
           </div>
         )}
 
-        {/* Documents */}
         <div className="bg-muted rounded-2xl p-4 space-y-4">
-          <p className="font-bold">დოკუმენტები და ანგარიში</p>
           <p>
             ჩვენ ყოველკვირეულად ვამოწმებთ დასახმარებელი პიროვნების სიტუციას და
             ასევე ვაქვეყნებთ ანგარიშებს თუ რაში იხარჯება თანხა
@@ -150,6 +149,26 @@ const CollectionPage = async ({ params }: Props) => {
           <div className="flex items-center gap-2">
             <Lock />
             <p>დაცული ტრანზაქციები</p>
+          </div>
+        </div>
+
+        <div className="bg-muted rounded-2xl p-4 space-y-4">
+          <h1 className="font-bold text-lg">დოკუმენტები</h1>
+          <div>
+            {collection.documents.map((doc) => {
+              return (
+                <a
+                  key={doc.id}
+                  href={doc.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-3 bg-muted rounded-2xk"
+                >
+                  <FileText className="w-5 h-5 text-muted-foreground shink-0" />
+                  <p className="text-sm font-medium">{doc.name}</p>
+                </a>
+              );
+            })}
           </div>
         </div>
 

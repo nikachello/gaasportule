@@ -34,6 +34,7 @@ export const getCollectionById = async (id: string) => {
     include: {
       city: true,
       sport: true,
+      documents: true,
       contributions: {
         include: {
           user: {
@@ -59,6 +60,7 @@ export const getSimilarCollections = async (
     include: {
       city: true,
       sport: true,
+      documents: true,
       contributions: {
         include: {
           user: {
